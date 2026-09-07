@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tejas's website</title>
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+  <!-- External Stylesheets -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="startmenu.css" />
+  <link rel="stylesheet" href="assets/win7anims.css" />
+
+  <!-- Webamp CDN -->
+  <script src="https://unpkg.com/webamp@1.5.0/built/webamp.bundle.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* CURSOR STYLING */
+    body, a, button, input, select, textarea, .desktop-icon, .tile, .wmc-tile, .file-item, .sidebar-item {
+      cursor: url('assets/245902.cur'), auto !important;
+    }
+
+    /* WEBAMP OVERRIDES */
+    #webamp-container,
+    #webamp-app,
+    #webamp {
+      position: absolute !important;
+      z-index: 999999 !important;
+      pointer-events: auto !important;
+    }
+
+    #webamp-container *,
+    #webamp-app *,
+    #webamp * {
+      cursor: auto !important;
+      pointer-events: auto !important;
+    }
+
+    iframe {
+      pointer-events: auto;
+    }
+
+    html, body {
+      width: 1024px;
+      height: 768px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    body {
+      background-image: url('assets/universe.png');
+      background-size: 1024px 768px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #000000;
+      position: relative;
+      user-select: none;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    /* DESKTOP ICONS */
+    .icon-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px;
+    }
+    .desktop-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 80px;
+      text-align: center;
+    }
+    .desktop-icon img { width: 32px; height: 32px; margin-bottom: 6px; }
+    .desktop-icon span {
+      color: #ffffff;
+      font-size: 11px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9), 0px 0px 4px rgba(0, 0, 0, 0.9);
+      word-wrap: break-word;
+      max-width: 75px;
+      line-height: 1.2;
+    }
+
+    /* WIN8 FRAME & TITLEBAR */
+    .win8-frame {
+      position: absolute;
+      top: 40px;
+      left: 112px;
+      width: 800px;
+      height: 600px;
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #6BADF6;
+      border: 6px solid #6BADF6;
+      border-top: none;
+      outline: 1px solid #5285BC;
+      color: #000;
+      transition: open 0.3s cubic-bezier(0, 0, 0.2, 1) forwards;
+    }
+    .win8-frame.maximized {
+      top: 0 !important;
+      left: 0 !important;
+      width: 1024px !important;
+      height: 738px !important;
+      border: none !important;
+      outline: none !important;
+    }
+    .win8-titlebar {
+      height: 20px;
+      background-color: #6BADF6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 8px;
+      transition: background-color 0.1s linear;
+      cursor: move !important;
+    }
+
+    /* WINDOW CONTROLS */
+    .float_right { display: flex; height: 100%; margin-left: auto; }
+    .float_right a {
+      display: block;
+      height: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    a.window_min { width: 25px; background-image: url('assets/windowcontrol/min.png'); }
+    a.window_min:hover { background-image: url('assets/windowcontrol/minhov.png'); }
+    a.window_resize { width: 25px; background-image: url('assets/windowcontrol/max.png'); }
+    a.window_resize:hover { background-image: url('assets/windowcontrol/maxhov.png'); }
+    a.window_close { width: 45px; background-image: url('assets/windowcontrol/close.png'); }
+    a.window_close:hover { background-image: url('assets/windowcontrol/closehov.png'); }
+
+    .window-content-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #ffffff;
+    }
+
+    /* CMD STYLES */
+    .terminal-container {
+      width: 100%;
+      height: 100%;
+      background-color: #0c0c0c;
+      color: #cccccc;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 13px;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .terminal-container.powershell {
+      background-color: #012456;
+      color: #ffffff;
+    }
+    .terminal-output {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .terminal-input-row {
+      display: flex;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .terminal-prompt {
+      margin-right: 8px;
+      user-select: none;
+    }
+    .terminal-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: inherit;
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    /* FILE EXPLORER STYLES */
+    .file-explorer-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      font-size: 12px;
+      color: #000000;
+    }
+    .explorer-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      background: #f0f0f0;
+      border-bottom: 1px solid #d9d9d9;
+    }
+    .explorer-address-bar {
+      flex: 1;
+      background: #ffffff;
+      border: 1px solid #cccccc;
+      padding: 3px 8px;
+      font-size: 12px;
+      color: #333333;
+    }
+    .explorer-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+    .explorer-sidebar {
+      width: 160px;
+      background: #fcfcfc;
+      border-right: 1px solid #e5e5e5;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 6px;
+      border-radius: 3px;
+    }
+    .sidebar-item img {
+      width: 16px;
+      height: 16px;
+    }
+    .sidebar-item:hover {
+      background: #e5f3ff;
+    }
+    .explorer-file-view {
+      flex: 1;
+      padding: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-content: flex-start;
+      overflow-y: auto;
+      background: #ffffff;
+    }
+    .file-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 75px;
+      text-align: center;
+      padding: 6px;
+      border-radius: 3px;
+    }
+    .file-item:hover {
+      background: #e5f3ff;
+      outline: 1px solid #99d1ff;
+    }
+    .file-item img {
+      width: 32px;
+      height: 32px;
+      margin-bottom: 4px;
+    }
+    .file-item span {
+      font-size: 11px;
+      word-break: break-all;
+    }
+
+    /* MEDIA CENTER */
+    .wmc-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at 30% 20%, #1579c1 0%, #083b66 50%, #031427 100%);
+      color: #ffffff;
+      font-family: 'Segoe UI', 'Trebuchet MS', sans-serif;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 0 100px rgba(0,0,0,0.6);
+    }
+    .wmc-header {
+      padding: 25px 50px 10px 50px;
+      font-size: 24px;
+      font-weight: normal;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #e0f2ff;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+    .wmc-header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .wmc-header-logo img {
+      width: 28px;
+      height: 28px;
+    }
+    .wmc-main-menu {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 22px;
+      padding: 20px 0 20px 60px;
+      flex: 1;
+    }
+    .wmc-menu-row {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+    .wmc-category-title {
+      font-size: 34px;
+      font-weight: 300;
+      width: 210px;
+      color: #ffffff;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9), 0 0 20px rgba(100, 180, 255, 0.4);
+      letter-spacing: -0.5px;
+    }
+    .wmc-tile-strip {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      padding: 10px 10px 10px 0;
+    }
+    .wmc-tile {
+      width: 150px;
+      height: 95px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(0, 0, 0, 0.25) 51%, rgba(255, 255, 255, 0.1) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s ease-out;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    }
+    .wmc-tile:hover {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(135, 206, 250, 0.35) 50%, rgba(10, 80, 160, 0.5) 51%, rgba(135, 206, 250, 0.4) 100%);
+      border-color: #ffffff;
+      transform: scale(1.08);
+      box-shadow: 0 0 22px rgba(80, 190, 255, 0.8), 0 6px 16px rgba(0,0,0,0.6), inset 0 1px 3px rgba(255, 255, 255, 0.9);
+    }
+    .wmc-tile img {
+      width: 36px;
+      height: 36px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+    }
+    .wmc-tile span {
+      font-size: 13px;
+      font-weight: 600;
+      color: #ffffff;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    }
+
+    /* TASKBAR */
+    .taskbar {
+      background-color: rgba(25, 25, 25, 0.75);
+      backdrop-filter: blur(5px);
+      bottom: 0;
+      height: 30px;
+      position: absolute;
+      width: 1024px;
+      z-index: 300000;
+      display: flex;
+      align-items: center;
+    }
+    .start-btn {
+      padding: 0 10px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .start-btn:hover { background: rgba(255, 255, 255, 0.1); }
+    .active-tab {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-bottom: 2px solid #0078d7;
+      color: #ffffff;
+      padding: 2px 10px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .clock-tray { margin-left: auto; padding-right: 12px; color: #ffffff; font-size: 11px; }
+
+    /* START MENU */
+    .start-menu {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1024px;
+      height: 738px;
+      background-color: #00485e;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+      display: none;
+      flex-direction: column;
+      padding: 30px 50px;
+      z-index: 200000;
+      color: #ffffff;
+    }
+    .start-menu.open { display: flex !important; }
+
+    .start-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      z-index: 10;
+    }
+
+    .start-header {
+      font-family: 'Segoe UI Light', 'Segoe UI', sans-serif;
+      font-size: 42px;
+      font-weight: 300;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .win7-avatar-frame {
+      width: 44px;
+      height: 44px;
+      padding: 2px;
+      background: linear-gradient(135deg, #ffffff 0%, #c4e0e5 40%, #4ca1af 100%);
+      border: 1px solid #7094a8;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .win7-avatar-frame img {
+      width: 100%;
+      height: 100%;
+      border-radius: 2px;
+      object-fit: cover;
+    }
+
+    .shutdown-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .shutdown-btn:hover {
+      background: #d13438;
+      border-color: #ffffff;
+    }
+
+    .start-body { display: flex; gap: 30px; flex: 1; align-items: flex-start; }
+    .tile-group { display: flex; flex-wrap: wrap; gap: 10px; max-width: 800px; }
+    .tile {
+      background: #0078d7;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      height: 120px;
+    }
+    .tile:hover { outline: 2px solid #fff; }
+    .tile.wide { width: 236px; }
+
+    .tile.popcat-tile {
+      width: 236px;
+      height: 236px;
+      background-color: #ff0055;
+      background-image: url('assets/femtanyl.png');
+      background-size: cover;
+      background-position: center;
+    }
+    .tile.popcat-tile .tile-title-scramble {
+      font-family: 'Segoe UI', 'Mukta Malar', 'Latha', sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 4px 6px;
+      border-radius: 2px;
+      width: fit-content;
+      color: #00ffcc;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DESKTOP ICONS -->
+  <div class="icon-grid">
+    <div class="desktop-icon" id="icon-website">
+      <img src="assets/unknown.png" alt="Tejas's website" />
+      <span>Tejas's website</span>
+    </div>
+
+    <div class="desktop-icon" id="icon-file-explorer">
+      <img src="assets/explorer.png" alt="File Explorer" />
+      <span>File Explorer</span>
+    </div>
+
+    <div class="desktop-icon" id="icon-wmc">
+      <img src="https://raw.githubusercontent.com/Visnalize/resources/main/icons/win7/Media%20Center/ehres_1.ico" alt="Media Center" />
+      <span>Media Center</span>
+    </div>
+
+    <div class="desktop-icon" id="icon-cmd">
+      <img src="https://raw.githubusercontent.com/Visnalize/resources/main/icons/win7/Default%20Programs/cmd_IDI_APPICON.ico" alt="Command Prompt" />
+      <span>Command Prompt</span>
+    </div>
+
+    <div class="desktop-icon" id="icon-webamp">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAGFBMVEUAAAAAAAC2trb/VQD////y8vL//7H/qgC61DvZAAAAAXRSTlMAQObYZgAAAAFiS0dEBI9o2VEAAAAHdElNRQfiAwcADiWYqKuJAAAA3klEQVQoz13RQY7DIAwFUHMDaJOw5ghVpGHdxRyASj4BUlmjSP3XH8BAJvUikcnLl+MQSSm5GRp1061/jF79unqNeRws/NKkNp8nYHbKRugJmF82XgCbj7+AgIj/INgvYCvQJzAoYHUTGNTKRncgPfBwAgLwfidgz2XcCgKO/Qc4kNm1hCKQcPhyUL+oCnwAD6wsJBiTsAOGuYfwVgLKCw00kmrAKqCS7ZAA7qOa5FtAB0TbLgEDqIgWcAIJvIC6kQnuHqYttQOydZXLCchmGXcAsu3JMkH/4epJXzXAHxFEV862nV0ZAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE4LTAzLTA3VDAwOjE0OjM3LTA1OjAw/19S6wAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxOC0wMy0wN1QwMDoxNDozNy0wNTowMI4C6lcAAAAASUVORUSCYII=" alt="Winamp" />
+      <span>Winamp</span>
+    </div>
+
+    <div class="desktop-icon" id="icon-python">
+      <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python" />
+      <span>Python</span>
+    </div>
+  </div>
+
+  <!-- WIN8 FRAME -->
+  <div class="win8-frame" id="window-explorer">
+    <div class="win8-titlebar" id="win8-titlebar">
+      <span id="window-title" style="font-size: 12px; font-weight: bold;">Tejas's website</span>
+      <div class="float_right">
+        <a href="#" class="window_min" id="btn-min" title="Minimize"></a>
+        <a href="#" class="window_resize" id="btn-max" title="Maximize"></a>
+        <a href="#" class="window_close" id="btn-close" title="Close"></a>
+      </div>
+    </div>
+
+    <!-- MAIN DISPLAY -->
+    <div style="flex: 1; background: #fff; overflow: hidden;" id="window-container">
+      <iframe src="indexarchived.html" class="window-content-iframe" id="app-iframe" title="Desktop Content"></iframe>
+    </div>
+  </div>
+
+  <!-- METRO START SCREEN -->
+  <div class="start-menu" id="start-menu">
+    <div class="start-topbar">
+      <div class="start-header">Start</div>
+      <div class="user-profile">
+        <span>Tejas</span>
+        <div class="win7-avatar-frame">
+          <img src="https://yt3.ggpht.com/lROSO8hUnRLRhKqrcnPbFxtPvsAkjdVxn4eVULGevyQV4PNWUi-8A0izcgfvMaiZaOBZxN7P=s176-c-k-c0x00ffffff-no-rj-mo" alt="Tejas Profile Picture" />
+        </div>
+        <button class="shutdown-btn" onclick="alert('Shutting down OS...'); toggleStartMenu();">
+          <span>⏻</span> Shut Down
+        </button>
+      </div>
+    </div>
+    
+    <div class="start-body">
+      <div class="tile-group">
+        <div class="tile wide" onclick="openWebsite(); toggleStartMenu();">
+          <img src="assets/unknown.png" width="32" height="32" alt="" />
+          <span>Tejas's website</span>
+        </div>
+
+        <div class="tile wide" onclick="openFileExplorer(); toggleStartMenu();" style="background: #008a00;">
+          <img src="assets/explorer.png" width="32" height="32" alt="" />
+          <span>File Explorer</span>
+        </div>
+
+        <div class="tile wide" onclick="openTerminal(); toggleStartMenu();" style="background: #2b5797;">
+          <img src="https://raw.githubusercontent.com/Visnalize/resources/main/icons/win7/Default%20Programs/cmd_IDI_APPICON.ico" width="32" height="32" alt="" />
+          <span>Command Prompt</span>
+        </div>
+
+        <div class="tile wide" onclick="openMediaCenter(); toggleStartMenu();" style="background: #005a9e;">
+          <img src="https://raw.githubusercontent.com/Visnalize/resources/main/icons/win7/Media%20Center/ehres_1.ico" width="32" height="32" alt="" />
+          <span>Windows Media Center</span>
+        </div>
+
+        <div class="tile popcat-tile" id="popcat-tile" onclick="openPopcat(); toggleStartMenu();">
+          <span class="tile-title-scramble" id="scramble-text">Popcat</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASKBAR -->
+  <nav class="taskbar">
+    <div class="start-btn" onclick="toggleStartMenu()">
+      <img src="https://www.rw-designer.com/icon-view/33040.png" width="18" height="18" alt="Start" />
+    </div>
+    <div class="clock-tray" id="clock"></div>
+  </nav>
+
+  <!-- WEBAMP CONTAINER -->
+  <div id="webamp-container"></div>
+
+  <script>
+    // ASSET PATH CONSTANTS
+    const ICON_EXPLORER = "assets/explorer.png";
+    const ICON_FOLDER = "https://www.rw-designer.com/icon-view/23984.png";
+    const ICON_DRIVE = "https://www.rw-designer.com/icon-image/24012-32x32x32.png";
+    const ICON_WEBAMP = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAGFBMVEUAAAAAAAC2trb/VQD////y8vL//7H/qgC61DvZAAAAAXRSTlMAQObYZgAAAAFiS0dEBI9o2VEAAAAHdElNRQfiAwcADiWYqKuJAAAA3klEQVQoz13RQY7DIAwFUHMDaJOw5ghVpGHdxRyASj4BUlmjSP3XH8BAJvUikcnLl+MQSSm5GRp1061/jF79unqNeRws/NKkNp8nYHbKRugJmF82XgCbj7+AgIj/INgvYCvQJzAoYHUTGNTKRncgPfBwAgLwfidgz2XcCgKO/Qc4kNm1hCKQcPhyUL+oCnwAD6wsJBiTsAOGuYfwVgLKCw00kmrAKqCS7ZAA7qOa5FtAB0TbLgEDqIgWcAIJvIC6kQnuHqYttQOydZXLCchmGXcAsu3JMkH/4epJXzXAHxFEV862nV0ZAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE4LTAzLTA3VDAwOjE0OjM3LTA1OjAw/19S6wAAACV0RVh0ZGF0ZTptb2RpZnkAMjDxOC0wMy0wN1QwMDoxNDozNy0wNTowMI4C6lcAAAAASUVORUSCYII=";
+
+    /* CHROMA SHIFT LOOP */
+    class ColorLoop {
+      constructor() {
+        this.effects = { color: 0 };
+        this.frame = document.getElementById('window-explorer');
+        this.titlebar = document.getElementById('win8-titlebar');
+        this.startLoop();
+      }
+
+      yield() {
+        return new Promise(resolve => requestAnimationFrame(resolve));
+      }
+
+      async startLoop() {
+        while (true) {
+          this.effects.color += 1;
+          this.effects.color %= 200;
+          
+          const hue = (this.effects.color / 200) * 360;
+          const colorHex = `hsl(${hue}, 75%, 60%)`;
+
+          if (this.frame && this.titlebar) {
+            this.frame.style.backgroundColor = colorHex;
+            this.frame.style.borderColor = colorHex;
+            this.titlebar.style.backgroundColor = colorHex;
+          }
+          
+          await this.yield(); 
+        }
+      }
+    }
+
+    new ColorLoop();
+
+    const win = document.getElementById('window-explorer');
+    const titlebar = document.getElementById('win8-titlebar');
+    const windowContainer = document.getElementById('window-container');
+    const windowTitle = document.getElementById('window-title');
+    const taskbarContainer = document.querySelector('.taskbar');
+    const clockTray = document.getElementById('clock');
+    let currentAppId = null;
+
+    /* WINDOW DRAGGING SYSTEM */
+    let isDragging = false;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+
+    titlebar.addEventListener('mousedown', (e) => {
+      // Prevent dragging when clicking the window control buttons
+      if (e.target.closest('.float_right') || win.classList.contains('maximized')) return;
+
+      isDragging = true;
+      dragOffsetX = e.clientX - win.offsetLeft;
+      dragOffsetY = e.clientY - win.offsetTop;
+      
+      const iframe = document.getElementById('app-iframe');
+      if (iframe) iframe.style.pointerEvents = 'none';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+
+      let newLeft = e.clientX - dragOffsetX;
+      let newTop = e.clientY - dragOffsetY;
+
+      // Keep window within desktop boundaries
+      newLeft = Math.max(0, Math.min(newLeft, 1024 - win.offsetWidth));
+      newTop = Math.max(0, Math.min(newTop, 738 - win.offsetHeight));
+
+      win.style.left = `${newLeft}px`;
+      win.style.top = `${newTop}px`;
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        const iframe = document.getElementById('app-iframe');
+        if (iframe) iframe.style.pointerEvents = 'auto';
+      }
+    });
+
+    /* DYNAMIC TASKBAR SYSTEM */
+    function addTaskbarTab(id, title, iconSrc, onClick) {
+      let tab = document.getElementById(`tab-${id}`);
+      if (!tab) {
+        tab = document.createElement('div');
+        tab.id = `tab-${id}`;
+        tab.className = 'active-tab';
+        tab.innerHTML = `<img src="${iconSrc}" width="14" height="14" alt="" /><span>${title}</span>`;
+        tab.onclick = onClick;
+        taskbarContainer.insertBefore(tab, clockTray);
+      } else {
+        tab.querySelector('span').innerText = title;
+        tab.querySelector('img').src = iconSrc;
+      }
+      return tab;
+    }
+
+    function removeTaskbarTab(id) {
+      const tab = document.getElementById(`tab-${id}`);
+      if (tab) tab.remove();
+    }
+
+    /* WINDOW CONTROLS */
+    function openExplorer() {
+      win.style.display = 'flex';
+      win.classList.remove('anim-close');
+      win.classList.add('anim-open');
+    }
+
+    function closeExplorer(removeTab = false) {
+      win.classList.remove('anim-open');
+      win.classList.add('anim-close');
+      setTimeout(() => {
+        if (win.classList.contains('anim-close')) {
+          win.style.display = 'none';
+          if (removeTab && currentAppId) {
+            removeTaskbarTab(currentAppId);
+            currentAppId = null;
+          }
+        }
+      }, 250);
+    }
+
+    function openApp(id, title, src, iconSrc) {
+      currentAppId = id;
+      windowContainer.innerHTML = `<iframe src="${src}" class="window-content-iframe" id="app-iframe" title="Desktop Content"></iframe>`;
+      windowTitle.innerText = title;
+      openExplorer();
+
+      addTaskbarTab(id, title, iconSrc, () => {
+        if (win.style.display === 'none' || win.classList.contains('anim-close')) {
+          openExplorer();
+        } else {
+          closeExplorer(false);
+        }
+      });
+    }
+
+    /* POPCAT APP */
+    function openPopcat() {
+      openApp('popcat', 'Popcat', 'https://s.soggy.cat/popcat/embed', 'assets/femtanyl.png');
+    }
+
+    /* TERMINAL (CMD / POWERSHELL) APP */
+    let terminalMode = 'cmd';
+
+    function openTerminal(mode = 'cmd') {
+      terminalMode = mode;
+      currentAppId = 'cmd';
+      const isPs = terminalMode === 'powershell';
+      const title = isPs ? 'Windows PowerShell' : 'Command Prompt';
+      const iconSrc = 'https://raw.githubusercontent.com/Visnalize/resources/main/icons/win7/Default%20Programs/cmd_IDI_APPICON.ico';
+
+      windowTitle.innerText = title;
+
+      const promptText = isPs 
+        ? 'PS C:\\Users\\Tejas>' 
+        : 'C:\\Users\\Tejas>';
+
+      const headerBanner = isPs 
+        ? 'Windows PowerShell\nCopyright (C) Microsoft Corporation. All rights reserved.\n\nType "help" or "cmd" to switch modes.\n' 
+        : 'Microsoft Windows [Version 10.0.19045.3803]\n(c) Microsoft Corporation. All rights reserved.\n\nType "help" or "powershell" to switch modes.\n';
+
+      windowContainer.innerHTML = `
+        <div class="terminal-container ${isPs ? 'powershell' : ''}" id="terminal-box" onclick="document.getElementById('cli-input')?.focus()">
+          <div class="terminal-output" id="cli-output">${headerBanner}</div>
+          <div class="terminal-input-row">
+            <span class="terminal-prompt" id="cli-prompt">${promptText}</span>
+            <input type="text" class="terminal-input" id="cli-input" autofocus autocomplete="off" spellcheck="false" />
+          </div>
+        </div>
+      `;
+
+      openExplorer();
+
+      addTaskbarTab('cmd', title, iconSrc, () => {
+        if (win.style.display === 'none' || win.classList.contains('anim-close')) {
+          openExplorer();
+        } else {
+          closeExplorer(false);
+        }
+      });
+
+      setTimeout(() => {
+        const input = document.getElementById('cli-input');
+        if (input) {
+          input.focus();
+          input.addEventListener('keydown', handleTerminalCommand);
+        }
+      }, 50);
+    }
+
+    function handleTerminalCommand(e) {
+      if (e.key !== 'Enter') return;
+
+      const input = document.getElementById('cli-input');
+      const output = document.getElementById('cli-output');
+      const container = document.getElementById('terminal-box');
+      const promptEl = document.getElementById('cli-prompt');
+      
+      const rawCmd = input.value.trim();
+      const cmd = rawCmd.toLowerCase();
+      const currentPrompt = promptEl.innerText;
+
+      output.innerText += `\n${currentPrompt} ${rawCmd}\n`;
+      input.value = '';
+
+      if (cmd === 'cls' || cmd === 'clear') {
+        output.innerText = '';
+      } else if (cmd === 'help') {
+        output.innerText += 
+          'Available commands:\n' +
+          '  help        - Displays this help message\n' +
+          '  cls / clear - Clears the console screen\n' +
+          '  dir / ls    - Lists files in the current directory\n' +
+          '  echo [text] - Displays input text\n' +
+          '  powershell  - Switches terminal to PowerShell mode\n' +
+          '  cmd         - Switches terminal to Command Prompt mode\n' +
+          '  popcat      - Opens Popcat embed\n' +
+          '  winamp      - Launches Winamp media player\n' +
+          '  color [hex] - Changes text color (CMD mode)\n' +
+          '  exit        - Closes the terminal window\n';
+      } else if (cmd === 'dir' || cmd === 'ls') {
+        output.innerText += 
+          ' Directory of C:\\Users\\Tejas\\Desktop\n\n' +
+          '08/16/2026  12:00 PM    <DIR>          .\n' +
+          '08/16/2026  12:00 PM    <DIR>          ..\n' +
+          '08/16/2026  01:15 PM            12,482 indexarchived.html\n' +
+          '08/16/2026  02:30 PM             1,024 script.py\n' +
+          '08/16/2026  09:10 AM           245,902 universe.png\n' +
+          '08/16/2026  10:45 AM            54,120 femtanyl.png\n';
+      } else if (cmd.startsWith('echo ')) {
+        output.innerText += rawCmd.substring(5) + '\n';
+      } else if (cmd === 'powershell') {
+        openTerminal('powershell');
+        return;
+      } else if (cmd === 'cmd') {
+        openTerminal('cmd');
+        return;
+      } else if (cmd === 'popcat') {
+        openPopcat();
+        output.innerText += 'Opening Popcat...\n';
+      } else if (cmd === 'winamp') {
+        launchWebamp();
+        output.innerText += 'Launching Webamp...\n';
+      } else if (cmd.startsWith('color ')) {
+        const colorVal = rawCmd.split(' ')[1];
+        if (container) container.style.color = colorVal || '#cccccc';
+      } else if (cmd === 'exit') {
+        closeExplorer(true);
+        return;
+      } else if (cmd !== '') {
+        if (terminalMode === 'powershell') {
+          output.innerText += `${rawCmd} : The term '${rawCmd}' is not recognized as the name of a cmdlet, function, script file, or operable program.\n`;
+        } else {
+          output.innerText += `'${rawCmd}' is not recognized as an internal or external command, operable program or batch file.\n`;
+        }
+      }
+
+      if (container) container.scrollTop = container.scrollHeight;
+    }
+
+    /* FILE EXPLORER APP */
+    function openFileExplorer() {
+      currentAppId = 'file-explorer';
+      windowTitle.innerText = 'File Explorer - Local Disk (C:)';
+      windowContainer.innerHTML = `
+        <div class="file-explorer-container">
+          <div class="explorer-toolbar">
+            <button onclick="openFileExplorer()" style="padding: 2px 8px;">↻</button>
+            <div class="explorer-address-bar">C:\\Users\\Tejas\\Desktop</div>
+          </div>
+          <div class="explorer-body">
+            <div class="explorer-sidebar">
+              <div class="sidebar-item"><img src="${ICON_FOLDER}" alt="" /> <b>Desktop</b></div>
+              <div class="sidebar-item"><img src="${ICON_FOLDER}" alt="" /> Documents</div>
+              <div class="sidebar-item"><img src="${ICON_FOLDER}" alt="" /> Downloads</div>
+              <div class="sidebar-item"><img src="${ICON_FOLDER}" alt="" /> Pictures</div>
+              <div class="sidebar-item"><img src="${ICON_DRIVE}" alt="" /> Local Disk (C:)</div>
+            </div>
+            <div class="explorer-file-view">
+              <div class="file-item" ondblclick="openWebsite()">
+                <img src="assets/unknown.png" alt="File" />
+                <span>indexarchived.html</span>
+              </div>
+              <div class="file-item" ondblclick="openTerminal()">
+                <img src="https://win98icons.alexmeub.com/icons/png/console_prompt-0.png" alt="File" />
+                <span>cmd.exe</span>
+              </div>
+              <div class="file-item" ondblclick="openPython()">
+                <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="File" />
+                <span>script.py</span>
+              </div>
+              <div class="file-item">
+                <img src="assets/universe.png" alt="File" />
+                <span>universe.png</span>
+              </div>
+              <div class="file-item">
+                <img src="assets/femtanyl.png" alt="File" />
+                <span>femtanyl.png</span>
+              </div>
+              <div class="file-item">
+                <img src="${ICON_FOLDER}" alt="Folder" />
+                <span>assets</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      openExplorer();
+      addTaskbarTab('file-explorer', 'File Explorer', ICON_EXPLORER, () => {
+        if (win.style.display === 'none' || win.classList.contains('anim-close')) {
+          openExplorer();
+        } else {
+          closeExplorer(false);
+        }
+      });
+    }
+
+    /* WINDOWS MEDIA CENTER APP */
+    function openMediaCenter() {
+      currentAppId = 'wmc';
+      windowTitle.innerText = 'Windows Media Center';
+      const wmcIconUrl = 'https://raw.githubusercontent.com/Visnalize/resources/main/icons/win7/Media%20Center/ehres_1.ico';
+      
+      windowContainer.innerHTML = `
+        <div class="wmc-container">
+          <div class="wmc-header">
+            <div class="wmc-header-logo">
+              <img src="${wmcIconUrl}" alt="WMC Orb" />
+              <span>media center</span>
+            </div>
+            <span style="font-size: 20px; opacity: 0.9;" id="wmc-clock"></span>
+          </div>
+          
+          <div class="wmc-main-menu">
+            <div class="wmc-menu-row">
+              <div class="wmc-category-title">TV + Movies</div>
+              <div class="wmc-tile-strip">
+                <div class="wmc-tile" onclick="playWmcSample('video')">
+                  <img src="https://win98icons.alexmeub.com/icons/png/video_file-0.png" alt="" />
+                  <span>Recorded TV</span>
+                </div>
+                <div class="wmc-tile" onclick="playWmcSample('video')">
+                  <img src="https://win98icons.alexmeub.com/icons/png/directory_movie-0.png" alt="" />
+                  <span>Movie Library</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="wmc-menu-row">
+              <div class="wmc-category-title">Music</div>
+              <div class="wmc-tile-strip">
+                <div class="wmc-tile" onclick="launchWebamp(); closeExplorer(false);">
+                  <img src="https://win98icons.alexmeub.com/icons/png/cd_audio_cd_a-4.png" alt="" />
+                  <span>Music Library</span>
+                </div>
+                <div class="wmc-tile" onclick="alert('Searching radio stations...')">
+                  <img src="https://win98icons.alexmeub.com/icons/png/loudspeaker_rays-0.png" alt="" />
+                  <span>Radio</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="wmc-menu-row">
+              <div class="wmc-category-title">Pictures</div>
+              <div class="wmc-tile-strip">
+                <div class="wmc-tile" onclick="openFileExplorer();">
+                  <img src="https://win98icons.alexmeub.com/icons/png/camera-2.png" alt="" />
+                  <span>Picture Library</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      openExplorer();
+
+      const updateWmcTime = () => {
+        const clockEl = document.getElementById('wmc-clock');
+        if (clockEl) clockEl.innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      };
+      updateWmcTime();
+
+      addTaskbarTab('wmc', 'Media Center', wmcIconUrl, () => {
+        if (win.style.display === 'none' || win.classList.contains('anim-close')) {
+          openExplorer();
+        } else {
+          closeExplorer(false);
+        }
+      });
+    }
+
+    function playWmcSample(type) {
+      windowContainer.innerHTML = `
+        <div style="background: #000; width: 100%; height: 100%; display: flex; flex-direction: column;">
+          <button onclick="openMediaCenter()" style="padding: 6px 12px; background: #333; color: #fff; border: none;">← Back to Media Center Menu</button>
+          <video controls autoplay style="width: 100%; height: calc(100% - 30px); object-fit: contain;">
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+          </video>
+        </div>
+      `;
+    }
+
+    function openWebsite() {
+      openApp('main-window', "Tejas's website", 'indexarchived.html', 'assets/unknown.png');
+    }
+
+    function openPython() {
+      openApp('python', 'Python IDE', 'https://trinket.io/embed/python/3d8d7ce66b', 'https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg');
+    }
+
+    document.getElementById('btn-close').onclick = (e) => { e.preventDefault(); closeExplorer(true); };
+    document.getElementById('btn-min').onclick = (e) => { e.preventDefault(); closeExplorer(false); };
+    document.getElementById('btn-max').onclick = (e) => { e.preventDefault(); win.classList.toggle('maximized'); };
+
+    document.getElementById('icon-website').ondblclick = openWebsite;
+    document.getElementById('icon-file-explorer').ondblclick = openFileExplorer;
+    document.getElementById('icon-wmc').ondblclick = openMediaCenter;
+    document.getElementById('icon-cmd').ondblclick = () => openTerminal('cmd');
+    document.getElementById('icon-python').ondblclick = openPython;
+
+    openWebsite();
+
+    function toggleStartMenu() {
+      document.getElementById('start-menu').classList.toggle('open');
+    }
+
+    function updateClock() {
+      document.getElementById('clock').innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    /* WEBAMP INTEGRATION */
+    let webampInstance = null;
+
+    function launchWebamp() {
+      if (webampInstance) {
+        webampInstance.reopen();
+        return;
+      }
+
+      webampInstance = new Webamp({
+        initialTracks: [
+          {
+            metaData: { artist: "DJ Mike Llama", title: "Llama Whippin' Intro" },
+            url: "https://cdn.jsdelivr.net/gh/captbaritone/webamp@45cbd44c17b40fc7031d5793851966e4c8dcd9b5/packages/webamp/demo/mp3/llama-2.91.mp3"
+          }
+        ],
+      });
+
+      const container = document.getElementById('webamp-container');
+      webampInstance.renderWhenReady(container);
+
+      addTaskbarTab('webamp', 'Winamp', ICON_WEBAMP, () => {
+        if (webampInstance) webampInstance.reopen();
+      });
+
+      webampInstance.onClose(() => {
+        removeTaskbarTab('webamp');
+        webampInstance.dispose();
+        webampInstance = null;
+      });
+    }
+
+    /* Shift + Escape Killswitch for Webamp */
+    document.addEventListener('keydown', (e) => {
+      if (e.shiftKey && e.key === 'Escape') {
+        if (webampInstance) {
+          webampInstance.dispose();
+          removeTaskbarTab('webamp');
+          webampInstance = null;
+        }
+      }
+    });
+
+    document.getElementById('icon-webamp').ondblclick = launchWebamp;
+
+    /* UNICODE + TAMIL TEXT SCRAMBLE */
+    class TextScramble {
+      constructor(el) {
+        this.el = el;
+        this.tamilChars = 'அஆஇஈஉஊஎஏஐஒஓஔகஙசஞடணதநபமயரலவழளறன';
+        
+        var rawPath = location.pathname;
+        var path = rawPath.split('/').filter(Boolean).join('/');
+
+        this.targetText = path || el.innerText;
+        this.startLoop();
+      }
+
+      randomChar() {
+        if (Math.random() < 0.5) {
+          return this.tamilChars[Math.floor(Math.random() * this.tamilChars.length)];
+        }
+        return String.fromCodePoint(Math.floor(Math.random() * (0x2FFF - 0x20)) + 0x20);
+      }
+
+      scrambleStep() {
+        let output = '';
+        for (let i = 0; i < this.targetText.length; i++) {
+          if (Math.random() < 0.4) {
+            output += this.targetText[i];
+          } else {
+            output += `<span>${this.randomChar()}</span>`;
+          }
+        }
+        this.el.innerHTML = output;
+      }
+
+      startLoop() {
+        setInterval(() => this.scrambleStep(), 100);
+      }
+    }
+
+    const scrambleEl = document.getElementById('scramble-text');
+    new TextScramble(scrambleEl);
+  </script>
+</body>
+</html>

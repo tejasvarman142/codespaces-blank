@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+	<link rel="stylesheet" href="assets/fonts.css">
+	<link rel="stylesheet" href="assets/MetroAppUI.css">
+	<link rel="stylesheet" href="assets/metroui.css">
+	<link rel="stylesheet" href="assets/main.css">
+	<link rel="stylesheet" href="assets/index.html.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPTVman</title>
+</head>
+<body>
+<div class="welcome">
+<h1>Sign in with IPTVpay</h1>
+	<h2>Email</h2>
+  <input type="text" id="fname" name="fname"><br><br>
+	<h2>Password</h2>
+  <input type="password" id="fname" name="fname"><br><br>
+<button id="SignIn" onclick="help(); this.onclick=null;">Sign in</button>
+<div id="demo"></div>
+
+<script>
+	function help() {
+	  // code to add another option
+	  var q = document.getElementById('demo');
+	  const node = document.createElement('div');
+	  node.classList.add("wrong");
+	  node.innerHTML = '<p>Incorrect email or password. Try again.</p>';
+	  q.appendChild(node);
+	}
+</script> 
+
+</div>
+</body>
+</html>

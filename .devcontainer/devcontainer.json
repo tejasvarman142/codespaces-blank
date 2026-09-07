@@ -1,0 +1,13 @@
+{
+  "name": "Default",
+  "image": "mcr.microsoft.com/devcontainers/universal:latest",
+  "forwardPorts": [1000],
+  "portsAttributes": {
+    "1000": {
+      "label": "Web Server",
+      "onAutoForward": "notify",
+      "visibility": "public"
+    }
+  },
+  "postCreateCommand": "bash /workspaces/codespaces-blank/.devcontainer/startup.sh"
+}

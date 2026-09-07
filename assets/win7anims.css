@@ -1,0 +1,49 @@
+/* Sharp 4-Step Pixelate Animation */
+@keyframes pixelate-open-freeze {
+  0% {
+    opacity: 0;
+    filter: blur(4px) contrast(140%);
+    transform: scale(0.96);
+  }
+  25% {
+    filter: blur(3px) contrast(130%);
+  }
+  50% {
+    filter: blur(2px) contrast(120%);
+  }
+  75% {
+    filter: blur(1px) contrast(110%);
+  }
+  100% {
+    opacity: 1;
+    /* Settles on a super light 0.5px retro edge */
+    filter: blur(0.5px) contrast(105%);
+    transform: scale(1);
+  }
+}
+
+@keyframes pixelate-close {
+  0% {
+    opacity: 1;
+    filter: blur(0.5px) contrast(105%);
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(4px) contrast(140%);
+    transform: scale(0.96);
+  }
+}
+
+.anim-open {
+  animation: pixelate-open-freeze 0.25s steps(4) forwards !important;
+}
+
+.anim-close {
+  animation: pixelate-close 0.2s steps(4) forwards !important;
+}
+
+/* Match iframe sharpness */
+.anim-open iframe {
+  filter: blur(0.5px) contrast(105%);
+}

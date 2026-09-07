@@ -1,0 +1,49 @@
+    /* WIN8 FRAME & TITLEBAR */
+    .win8-frame {
+      position: absolute;
+      top: 40px;
+      left: 112px;
+      width: 800px;
+      height: 600px;
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #6BADF6;
+      border: 6px solid #6BADF6;
+      border-top: none;
+      outline: 1px solid #5285BC;
+      color: #000;
+    }
+    .win8-frame.maximized {
+      top: 0 !important;
+      left: 0 !important;
+      width: 1024px !important;
+      height: 738px !important;
+      border: none !important;
+      outline: none !important;
+    }
+    .win8-titlebar {
+      height: 20px;
+      background-color: #6BADF6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 8px;
+    }
+
+    /* WINDOW CONTROLS */
+    .float_right { display: flex; height: 100%; margin-left: auto; }
+    .float_right a {
+      display: block;
+      height: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      cursor: pointer;
+    }
+    a.window_min { width: 25px; background-image: url('assets/windowcontrol/min.png'); }
+    a.window_min:hover { background-image: url('assets/windowcontrol/minhov.png'); }
+    a.window_resize { width: 25px; background-image: url('assets/windowcontrol/max.png'); }
+    a.window_resize:hover { background-image: url('assets/windowcontrol/maxhov.png'); }
+    a.window_close { width: 45px; background-image: url('assets/windowcontrol/close.png'); }
+    a.window_close:hover { background-image: url('assets/windowcontrol/closehov.png'); }
